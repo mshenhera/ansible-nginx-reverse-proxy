@@ -19,7 +19,7 @@
     group: www-data
     mode: 0640
   with_items: "{{ nginx_reverse_proxy_proxies }}"
-  when: item.basic_auth_file is defined
+  when: item.auth_basic_file is defined
 
 - name: disable default nginx configuration
   file:
