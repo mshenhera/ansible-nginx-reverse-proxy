@@ -1,0 +1,18 @@
+galaxy_info:
+  author: mykola.shenhera@gmail.com
+  description: Ansible role to deploy nginx reverse proxy configurations.
+  company: N-IX
+
+  license: license BSD
+
+  min_ansible_version: 2.4.3
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+
+  galaxy_tags:
+    - nginx
+
+dependencies: []

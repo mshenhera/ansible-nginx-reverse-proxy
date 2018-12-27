@@ -1,0 +1,35 @@
+# vim:ft=ansible:
+---
+
+- name: Install nginx
+  apt:
+    name: "nginx"
+    state: present
+
+- name: insatll passlib required htpasswd module
+  pip:
+    name: passlib
+
+- name: install basic auth file
+  htpasswd:
+    path: "{{ item.auth_basic_file }}"
+    name: "{{ item.auth_basic_user }}"
+    password: "{{ item.auth_basic_password }}"
+    owner: root
+    group: www-data
+    mode: 0640
+  with_items: "{{ nginx_reverse_proxy_proxies }}"
+  when: item.basic_auth_file is defined
+
+- name: disable default nginx configuration
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: deploy reverse proxy configurations
+  template:
+    src: reverse-proxy.conf.j2
+    dest: "/etc/nginx/sites-enabled/{{ item.config_name }}.conf"
+  with_items: "{{ nginx_reverse_proxy_proxies }}"
+  notify:
+    - restart nginx
